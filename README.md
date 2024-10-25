@@ -1,125 +1,89 @@
-<p align="center">
-  <br />
-  <a href="https://nodejs.org">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://nodejs.org/static/logos/nodejsLight.svg">
-      <img src="https://nodejs.org/static/logos/nodejsDark.svg" width="200px">
-    </picture>
-  </a>
-</p>
+# Devops Project
 
-<p align="center">
-  <a href="https://nodejs.org">Node.js</a> Website built using Next.js with TypeScript, CSS Modules/Tailwind, and MDXv3
-</p>
+## Project Overview
 
-<p align="center">
-  <a title="MIT License" href="LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" />
-  </a>
-  <a title="Localised" href="https://crowdin.com/project/nodejs-web">
-    <img src="https://badges.crowdin.net/nodejs-web/localized.svg" alt="Crowdin Badge" />
-  </a>
-  <a title="Vercel" href="https://vercel.com">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/powered%20by-Vercel%20%E2%96%B2-white">
-      <img src="https://img.shields.io/badge/powered%20by-Vercel%20%E2%96%B2-black" alt="Powered by Vercel">
-    </picture>
-  </a>
-  <br />
-  <img src="https://github.com/nodejs/nodejs.org/actions/workflows/build.yml/badge.svg" alt="Build and Analysis Checks" />
-  <a title="scorecard" href="https://securityscorecards.dev/viewer/?uri=github.com/nodejs/nodejs.org">
-    <img src="https://api.securityscorecards.dev/projects/github.com/nodejs/nodejs.org/badge" alt="nodejs.org scorecard badge" />
-  </a>
-  <a href="http://commitizen.github.io/cz-cli/" alt="Commitizen friendly">
-    <img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg">
-  </a>
-  <br />
-  <br />
-</p>
+This project automates the deployment of the [Node.js.org](https://github.com/nodejs/nodejs.org) website using CI/CD principles. It covers forking the repository, local testing, creating a Jenkins pipeline, and deploying to a Kubernetes cluster with ArgoCD.
 
-## What is this repo?
+## Prerequisites
 
-[Nodejs.org](https://nodejs.org/) by the [OpenJS Foundation](https://openjsf.org/) is the official website for the Node.js® JavaScript runtime. This repo is the source code for the website. It is built using [Next.js](https://nextjs.org), a React Framework.
+- **Node.js** and **npm** 18 or above
+- **Jenkins** for CI/CD pipeline automation
+- **Docker** for containerization 
+- **Kubernetes** cluster configured
+- **ArgoCD** installed in the Kubernetes cluster for GitOps deployment
+- 
+- ## Local Setup
 
-```bash
-npm ci
-npx turbo dev
+1. **Fork the Node.js.org Repository**
 
-# listening at localhost:3000
+   - Clone your forked repository:
+     ```bash
+     git clone https://github.com/halimo22/nodejs.org.git
+     cd nodejs.org
+     ```
+
+2. **Build and Run Locally**
+
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Run the development server:
+     ```bash
+     npx turbo dev
+     ```
+   - The site should now be available at `http://localhost:3000`.
+
+ 3. **Run Tests**
+   - Ensure the application is functioning as expected by running:
+     ```bash
+     npm test
+     ```
+
+## CI/CD Pipeline Setup
+
+1. **Jenkins Pipeline Configuration**
+
+   - Configure a Jenkins pipeline to automate the following:
+     - **Clone the Repository**
+     - **Build the Application**
+     - **Run Tests**
+     - **Build Docker Image**
+     - **Push to Registry**
+    
+  #### Fetch or Checkout stage
+  ![pipeline 1](https://github.com/user-attachments/assets/4e00539e-8cfd-4a7b-845c-e06679bc86c1)
+  #### Install dependencies
+  ![pipeline 2](https://github.com/user-attachments/assets/cbb1865f-034d-4ad0-a1c0-c04aa28898bf)
+  #### Run Unit testing
+  ![pipeline 3](https://github.com/user-attachments/assets/a9461371-0e89-415c-9f34-704aee3bd68e)
+  #### Dockerize
+  ![pipeline 4](https://github.com/user-attachments/assets/bf663d0a-4b2d-4f36-833f-7cd13cc54b1f)
+  ![pipeline 5](https://github.com/user-attachments/assets/512a19d0-4704-4494-89c6-baa6684dfd75)
+  
+the push to docker hub failed due to internet connection
+
+## Deployment with ArgoCD
+
+1. **ArgoCD Application Creation**
+
+   - Create a new ArgoCD Application pointing to your GitHub repository where the Kubernetes manifests are stored.
+
+2. **Application Sync**
+   - ArgoCD will automatically deploy and sync your application changes to the cluster.
+
+    ## Folder Structure
+
 ```
+nodejs.org/
+│
+├── Jenkinsfile                # CI/CD pipeline script
+├── deploy/                        # ArgoCD and Kubernetes manifests
+│   ├── deployment.yaml
+│   └── service.yaml
+└── README.md                   # Project documentation
+``` 
 
-## Contributing
 
-This project adopts the Node.js [Code of Conduct][].
+ 
 
-Any person who wants to contribute to the Website is welcome! Please read [Contribution Guidelines][] and see the [Figma Design][] to understand better the structure of this repository.
-
-> \[!IMPORTANT]\
-> Please read our [Translation Guidelines][] before contributing to Translation and Localization of the Website
-
-> \[!NOTE]\
-> We recommend a read of all Relevant Links below before doing code changes; Including Dependency changes, Content changes, and Code changes.
-
-### Deployment
-
-The Website is automatically deployed to [Vercel](https://vercel.com) through its GitHub App integration when new pushes happen on the `main` branch.
-
-Details regarding the deployment are only accessible to the maintainers of the Website Team due to certain limitations.
-
-The current integration is owned by the OpenJS Foundation and managed by the Website Team.
-
-<details>
-  <summary>Legacy Deployment</summary>
-
-The full setup is in <https://github.com/nodejs/build/tree/master/ansible/www-standalone> minus secrets and certificates.
-
-The webhook is set up on GitHub for this project and talks to a small Node server on the host, which does the work. See the [github-webhook](https://github.com/rvagg/github-webhook) package for this.
-
-</details>
-
-## Node.js Binaries & API Docs
-
-This repository does not contain the codebase or related infrastructure that serves `https://nodejs.org/api/`, `https://nodejs.org/docs/` or `https://nodejs.org/dist/`.
-
-These are maintained in different repositories and we urge users to open **issues in their respective repositories**, for bug reports, feature requests or any matter related to these endpoints.
-
-- [`release-cloudflare-worker`](https://github.com/nodejs/release-cloudflare-worker): The codebase responsible for serving the Node.js Distribution Binaries, API Docs and any other assets from the links mentioned above.
-  - We use Cloudflare R2 Buckets for storing our Assets and Cloudflare Workers for serving these Assets to the Web.
-- [`node/doc/api`](https://github.com/nodejs/node/tree/main/doc/api): The source code of our API docs, it contains all the Node.js API Documentation Markdown files
-  - [`node/doc`](https://github.com/nodejs/node/tree/main/doc) contains the HTML templates, CSS styles and JavaScript code that runs on the client-side of our API Docs generated pages.
-  - [`node/tools/doc`](https://github.com/nodejs/node/tree/main/tools/doc) contains the tooling that validates, lints, builds and compiles our API Docs. Also responsible for generating what you see when accessing `https://nodejs.org/api/`.
-
-## Relevant Links
-
-[Code of Conduct][]
-
-[Contribution Guidelines][]
-
-[Collaborator Guide][]
-
-[Figma Design][]
-
-[Content vs Code][]
-
-[Dependency Pinning][]
-
-[Translation Guidelines][]
-
-## Thanks
-
-- Thanks to all contributors and collaborators that make this project possible.
-- Thanks to [Chromatic](https://www.chromatic.com/) for providing the visual testing platform that helps us review UI changes and catch visual regressions.
-- Thanks to [Vercel](https://www.vercel.com/) for providing the infrastructure that serves and powers the Node.js Website
-- Thanks to [Cloudflare](https://cloudflare.com) for providing the infrastructure that serves Node.js's Website, Node.js's CDN and more.
-  - A really warm thank you to Cloudflare as we would not be able to serve our community without their immense support.
-- Thanks to [Sentry](https://sentry.io/welcome/) for providing an open source license for their error reporting, monitoring and diagnostic tools.
-- Thanks to [Crowdin](https://crowdin.com/) for providing a platform that allows us to localize the Node.js Website and collaborate with translators.
-- Thanks to [Orama](https://docs.oramasearch.com/) for providing a search platform that indexes our expansive content and provides lightning-fast results for our users.
-
-[code of conduct]: https://github.com/nodejs/admin/blob/main/CODE_OF_CONDUCT.md
-[contribution guidelines]: https://github.com/nodejs/nodejs.org/blob/main/CONTRIBUTING.md
-[content vs code]: https://github.com/nodejs/nodejs.org/blob/main/CONTENT_VS_CODE.md
-[dependency pinning]: https://github.com/nodejs/nodejs.org/blob/main/DEPENDENCY_PINNING.md
-[collaborator guide]: https://github.com/nodejs/nodejs.org/blob/main/COLLABORATOR_GUIDE.md
-[figma design]: https://www.figma.com/file/pu1vZPqNIM7BePd6W8APA5/Node.js
-[translation guidelines]: https://github.com/nodejs/nodejs.org/blob/main/TRANSLATION.md
