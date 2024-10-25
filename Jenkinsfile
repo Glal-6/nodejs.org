@@ -43,7 +43,7 @@ pipeline {
                 dir('nodejs.org') {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'sudo docker push 663/nodejs.org'
+                        sh 'sudo docker push Glal663/nodejs.org'
                     }
                 }
             }
