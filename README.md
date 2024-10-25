@@ -18,7 +18,7 @@ This project automates the deployment of the [Node.js.org](https://github.com/no
 
    - Clone your forked repository:
      ```bash
-     git clone https://github.com/halimo22/nodejs.org.git
+     git clone https://github.com/Glal-6/nodejs.org
      cd nodejs.org
      ```
 
